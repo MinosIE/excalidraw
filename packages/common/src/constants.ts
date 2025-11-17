@@ -420,12 +420,18 @@ export const DEFAULT_ELEMENT_PROPS: {
   locked: false,
 };
 
+export const LIBRARY_SIDEBAR_TYPE = {
+  dog: "dog",
+  ai: "ai",
+  local: "local",
+};
+
 export const LIBRARY_SIDEBAR_TAB = "library";
 export const CANVAS_SEARCH_TAB = "search";
 
 export const DEFAULT_SIDEBAR = {
   name: "default",
-  defaultTab: LIBRARY_SIDEBAR_TAB,
+  defaultTab: LIBRARY_SIDEBAR_TYPE.dog,
 } as const;
 
 export const LIBRARY_DISABLED_TYPES = new Set([

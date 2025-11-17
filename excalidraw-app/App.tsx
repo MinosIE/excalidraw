@@ -1,10 +1,8 @@
 import {
   Excalidraw,
-  LiveCollaborationTrigger,
   TTDDialogTrigger,
   CaptureUpdateAction,
   reconcileElements,
-  useEditorInterface,
 } from "@excalidraw/excalidraw";
 import { trackEvent } from "@excalidraw/excalidraw/analytics";
 import { getDefaultAppState } from "@excalidraw/excalidraw/appState";
@@ -95,7 +93,6 @@ import Collab, {
 } from "./collab/Collab";
 import { AppFooter } from "./components/AppFooter";
 import { AppMainMenu } from "./components/AppMainMenu";
-import { AppWelcomeScreen } from "./components/AppWelcomeScreen";
 import {
   ExportToExcalidrawPlus,
   exportToExcalidrawPlus,
@@ -124,10 +121,7 @@ import {
 } from "./data/LocalData";
 import { isBrowserStorageStateNewer } from "./data/tabSync";
 import { ShareDialog, shareDialogStateAtom } from "./share/ShareDialog";
-import CollabError, { collabErrorIndicatorAtom } from "./collab/CollabError";
 import { useHandleAppTheme } from "./useHandleAppTheme";
-import { getPreferredLanguage } from "./app-language/language-detector";
-import { useAppLangCode } from "./app-language/language-state";
 import DebugCanvas, {
   debugRenderer,
   isVisualDebuggerEnabled,
@@ -138,7 +132,6 @@ import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
 
 import "./index.scss";
 
-import { ExcalidrawPlusPromoBanner } from "./components/ExcalidrawPlusPromoBanner";
 import { AppSidebar } from "./components/AppSidebar";
 
 import type { CollabAPI } from "./collab/Collab";
@@ -344,10 +337,6 @@ const ExcalidrawWrapper = () => {
 
   const { editorTheme, appTheme, setAppTheme } = useHandleAppTheme();
 
-  const [langCode, setLangCode] = useAppLangCode();
-
-  const editorInterface = useEditorInterface();
-
   // initial state
   // ---------------------------------------------------------------------------
 
@@ -377,7 +366,6 @@ const ExcalidrawWrapper = () => {
   const [isCollaborating] = useAtomWithInitialValue(isCollaboratingAtom, () => {
     return isCollaborationLink(window.location.href);
   });
-  const collabError = useAtomValue(collabErrorIndicatorAtom);
 
   useHandleLibrary({
     excalidrawAPI,
@@ -517,7 +505,7 @@ const ExcalidrawWrapper = () => {
         if (isBrowserStorageStateNewer(STORAGE_KEYS.VERSION_DATA_STATE)) {
           const localDataState = importFromLocalStorage();
           const username = importUsernameFromLocalStorage();
-          setLangCode(getPreferredLanguage());
+
           excalidrawAPI.updateScene({
             ...localDataState,
             captureUpdate: CaptureUpdateAction.NEVER,
@@ -596,7 +584,7 @@ const ExcalidrawWrapper = () => {
         false,
       );
     };
-  }, [isCollabDisabled, collabAPI, excalidrawAPI, setLangCode]);
+  }, [isCollabDisabled, collabAPI, excalidrawAPI]);
 
   useEffect(() => {
     const unloadHandler = (event: BeforeUnloadEvent) => {
@@ -844,7 +832,7 @@ const ExcalidrawWrapper = () => {
             },
           },
         }}
-        langCode={langCode}
+        langCode="zh-CN"
         renderCustomStats={renderCustomStats}
         detectScroll={false}
         handleKeyboardGlobally={true}
@@ -855,24 +843,7 @@ const ExcalidrawWrapper = () => {
             return null;
           }
 
-          return (
-            <div className="excalidraw-ui-top-right">
-              {excalidrawAPI?.getEditorInterface().formFactor === "desktop" && (
-                <ExcalidrawPlusPromoBanner
-                  isSignedIn={isExcalidrawPlusSignedUser}
-                />
-              )}
-
-              {collabError.message && <CollabError collabError={collabError} />}
-              <LiveCollaborationTrigger
-                isCollaborating={isCollaborating}
-                onSelect={() =>
-                  setShareDialogState({ isOpen: true, type: "share" })
-                }
-                editorInterface={editorInterface}
-              />
-            </div>
-          );
+          return <></>;
         }}
         onLinkOpen={(element, event) => {
           if (element.link && isElementLink(element.link)) {
@@ -889,10 +860,10 @@ const ExcalidrawWrapper = () => {
           setTheme={(theme) => setAppTheme(theme)}
           refresh={() => forceRefresh((prev) => !prev)}
         />
-        <AppWelcomeScreen
+        {/* <AppWelcomeScreen
           onCollabDialogOpen={onCollabDialogOpen}
           isCollabEnabled={!isCollabDisabled}
-        />
+        /> */}
         <OverwriteConfirmDialog>
           <OverwriteConfirmDialog.Actions.ExportToImage />
           <OverwriteConfirmDialog.Actions.SaveToDisk />

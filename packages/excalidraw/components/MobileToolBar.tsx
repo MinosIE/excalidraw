@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import clsx from "clsx";
 
-import { KEYS, capitalizeString } from "@excalidraw/common";
+import { capitalizeString } from "@excalidraw/common";
 
 import { trackEvent } from "../analytics";
 
@@ -9,11 +9,8 @@ import { t } from "../i18n";
 
 import { isHandToolActive } from "../appState";
 
-import { useTunnels } from "../context/tunnels";
-
 import { HandButton } from "./HandButton";
 import { ToolButton } from "./ToolButton";
-import DropdownMenu from "./dropdownMenu/DropdownMenu";
 import { ToolPopover } from "./ToolPopover";
 
 import {
@@ -22,18 +19,13 @@ import {
   EraserIcon,
   RectangleIcon,
   ArrowIcon,
-  extraToolsIcon,
   DiamondIcon,
   EllipseIcon,
   LineIcon,
   TextIcon,
   ImageIcon,
   frameToolIcon,
-  EmbedIcon,
-  laserPointerToolIcon,
   LassoIcon,
-  mermaidLogoIcon,
-  MagicIcon,
 } from "./icons";
 
 import "./ToolIcon.scss";
@@ -93,7 +85,6 @@ export const MobileToolBar = ({
   setAppState,
 }: MobileToolBarProps) => {
   const activeTool = app.state.activeTool;
-  const [isOtherShapesMenuOpen, setIsOtherShapesMenuOpen] = useState(false);
   const [lastActiveGenericShape, setLastActiveGenericShape] = useState<
     "rectangle" | "diamond" | "ellipse"
   >("rectangle");
@@ -120,10 +111,6 @@ export const MobileToolBar = ({
   }, [activeTool.type]);
 
   const frameToolSelected = activeTool.type === "frame";
-  const laserToolSelected = activeTool.type === "laser";
-  const embeddableToolSelected = activeTool.type === "embeddable";
-
-  const { TTDDialogTriggerTunnel } = useTunnels();
 
   const handleToolChange = (toolType: string, pointerType?: string) => {
     if (app.state.activeTool.type !== toolType) {
@@ -155,44 +142,9 @@ export const MobileToolBar = ({
   const showImageToolOutside = toolbarWidth >= MIN_WIDTH + 2 * ADDITIONAL_WIDTH;
   const showFrameToolOutside = toolbarWidth >= MIN_WIDTH + 3 * ADDITIONAL_WIDTH;
 
-  const extraTools = [
-    "text",
-    "frame",
-    "embeddable",
-    "laser",
-    "magicframe",
-  ].filter((tool) => {
-    if (showTextToolOutside && tool === "text") {
-      return false;
-    }
-    if (showImageToolOutside && tool === "image") {
-      return false;
-    }
-    if (showFrameToolOutside && tool === "frame") {
-      return false;
-    }
-    return true;
-  });
-  const extraToolSelected = extraTools.includes(activeTool.type);
-  const extraIcon = extraToolSelected
-    ? activeTool.type === "text"
-      ? TextIcon
-      : activeTool.type === "image"
-      ? ImageIcon
-      : activeTool.type === "frame"
-      ? frameToolIcon
-      : activeTool.type === "embeddable"
-      ? EmbedIcon
-      : activeTool.type === "laser"
-      ? laserPointerToolIcon
-      : activeTool.type === "magicframe"
-      ? MagicIcon
-      : extraToolsIcon
-    : extraToolsIcon;
-
   return (
     <div
-      className="mobile-toolbar"
+      className="mobile-toolbar test-mobile"
       ref={(div) => {
         if (div) {
           setToolbarWidth(div.getBoundingClientRect().width);
@@ -373,112 +325,6 @@ export const MobileToolBar = ({
           onChange={() => handleToolChange("frame")}
         />
       )}
-
-      {/* Other Shapes */}
-      <DropdownMenu open={isOtherShapesMenuOpen} placement="top">
-        <DropdownMenu.Trigger
-          className={clsx(
-            "App-toolbar__extra-tools-trigger App-toolbar__extra-tools-trigger--mobile",
-            {
-              "App-toolbar__extra-tools-trigger--selected":
-                extraToolSelected || isOtherShapesMenuOpen,
-            },
-          )}
-          onToggle={() => {
-            setIsOtherShapesMenuOpen(!isOtherShapesMenuOpen);
-            setAppState({ openMenu: null, openPopup: null });
-          }}
-          title={t("toolBar.extraTools")}
-          style={{
-            width: WIDTH,
-            height: WIDTH,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {extraIcon}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content
-          onClickOutside={() => setIsOtherShapesMenuOpen(false)}
-          onSelect={() => setIsOtherShapesMenuOpen(false)}
-          className="App-toolbar__extra-tools-dropdown"
-        >
-          {!showTextToolOutside && (
-            <DropdownMenu.Item
-              onSelect={() => app.setActiveTool({ type: "text" })}
-              icon={TextIcon}
-              shortcut={KEYS.T.toLocaleUpperCase()}
-              data-testid="toolbar-text"
-              selected={activeTool.type === "text"}
-            >
-              {t("toolBar.text")}
-            </DropdownMenu.Item>
-          )}
-
-          {!showImageToolOutside && (
-            <DropdownMenu.Item
-              onSelect={() => app.setActiveTool({ type: "image" })}
-              icon={ImageIcon}
-              data-testid="toolbar-image"
-              selected={activeTool.type === "image"}
-            >
-              {t("toolBar.image")}
-            </DropdownMenu.Item>
-          )}
-          {!showFrameToolOutside && (
-            <DropdownMenu.Item
-              onSelect={() => app.setActiveTool({ type: "frame" })}
-              icon={frameToolIcon}
-              shortcut={KEYS.F.toLocaleUpperCase()}
-              data-testid="toolbar-frame"
-              selected={frameToolSelected}
-            >
-              {t("toolBar.frame")}
-            </DropdownMenu.Item>
-          )}
-          <DropdownMenu.Item
-            onSelect={() => app.setActiveTool({ type: "embeddable" })}
-            icon={EmbedIcon}
-            data-testid="toolbar-embeddable"
-            selected={embeddableToolSelected}
-          >
-            {t("toolBar.embeddable")}
-          </DropdownMenu.Item>
-          <DropdownMenu.Item
-            onSelect={() => app.setActiveTool({ type: "laser" })}
-            icon={laserPointerToolIcon}
-            data-testid="toolbar-laser"
-            selected={laserToolSelected}
-            shortcut={KEYS.K.toLocaleUpperCase()}
-          >
-            {t("toolBar.laser")}
-          </DropdownMenu.Item>
-          <div style={{ margin: "6px 0", fontSize: 14, fontWeight: 600 }}>
-            Generate
-          </div>
-          {app.props.aiEnabled !== false && <TTDDialogTriggerTunnel.Out />}
-          <DropdownMenu.Item
-            onSelect={() => app.setOpenDialog({ name: "ttd", tab: "mermaid" })}
-            icon={mermaidLogoIcon}
-            data-testid="toolbar-embeddable"
-          >
-            {t("toolBar.mermaidToExcalidraw")}
-          </DropdownMenu.Item>
-          {app.props.aiEnabled !== false && app.plugins.diagramToCode && (
-            <>
-              <DropdownMenu.Item
-                onSelect={() => app.onMagicframeToolSelect()}
-                icon={MagicIcon}
-                data-testid="toolbar-magicframe"
-              >
-                {t("toolBar.magicframe")}
-                <DropdownMenu.Item.Badge>AI</DropdownMenu.Item.Badge>
-              </DropdownMenu.Item>
-            </>
-          )}
-        </DropdownMenu.Content>
-      </DropdownMenu>
     </div>
   );
 };

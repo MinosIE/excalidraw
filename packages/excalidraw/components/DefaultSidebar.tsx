@@ -3,8 +3,8 @@ import clsx from "clsx";
 import {
   CANVAS_SEARCH_TAB,
   DEFAULT_SIDEBAR,
-  LIBRARY_SIDEBAR_TAB,
   composeEventHandlers,
+  LIBRARY_SIDEBAR_TYPE,
 } from "@excalidraw/common";
 
 import type { MarkOptional, Merge } from "@excalidraw/common/utility-types";
@@ -15,11 +15,8 @@ import { useUIAppState } from "../context/ui-appState";
 import "../components/dropdownMenu/DropdownMenu.scss";
 
 import { useExcalidrawSetAppState } from "./App";
-import { LibraryMenu } from "./LibraryMenu";
-import { SearchMenu } from "./SearchMenu";
 import { Sidebar } from "./Sidebar/Sidebar";
 import { withInternalFallback } from "./hoc/withInternalFallback";
-import { LibraryIcon, searchIcon } from "./icons";
 
 import type { SidebarProps, SidebarTriggerProps } from "./Sidebar/common";
 
@@ -99,21 +96,21 @@ export const DefaultSidebar = Object.assign(
           <Sidebar.Tabs>
             <Sidebar.Header>
               <Sidebar.TabTriggers>
-                <Sidebar.TabTrigger tab={CANVAS_SEARCH_TAB}>
-                  {searchIcon}
+                <Sidebar.TabTrigger tab={LIBRARY_SIDEBAR_TYPE.dog}>
+                  气球狗
                 </Sidebar.TabTrigger>
-                <Sidebar.TabTrigger tab={LIBRARY_SIDEBAR_TAB}>
-                  {LibraryIcon}
+                <Sidebar.TabTrigger tab={LIBRARY_SIDEBAR_TYPE.ai}>
+                  AI
+                </Sidebar.TabTrigger>
+                <Sidebar.TabTrigger tab={LIBRARY_SIDEBAR_TYPE.local}>
+                  本地
                 </Sidebar.TabTrigger>
                 <DefaultSidebarTabTriggersTunnel.Out />
               </Sidebar.TabTriggers>
             </Sidebar.Header>
-            <Sidebar.Tab tab={LIBRARY_SIDEBAR_TAB}>
-              <LibraryMenu />
-            </Sidebar.Tab>
-            <Sidebar.Tab tab={CANVAS_SEARCH_TAB}>
-              <SearchMenu />
-            </Sidebar.Tab>
+            <Sidebar.Tab tab={LIBRARY_SIDEBAR_TYPE.dog}>气球狗图库</Sidebar.Tab>
+            <Sidebar.Tab tab={LIBRARY_SIDEBAR_TYPE.ai}>AI图库</Sidebar.Tab>
+            <Sidebar.Tab tab={LIBRARY_SIDEBAR_TYPE.local}>本地图库</Sidebar.Tab>
             {children}
           </Sidebar.Tabs>
         </Sidebar>

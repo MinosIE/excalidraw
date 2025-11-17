@@ -51,22 +51,6 @@ export const AppWelcomeScreen: React.FC<{
         <WelcomeScreen.Center.Menu>
           <WelcomeScreen.Center.MenuItemLoadScene />
           <WelcomeScreen.Center.MenuItemHelp />
-          {props.isCollabEnabled && (
-            <WelcomeScreen.Center.MenuItemLiveCollaborationTrigger
-              onSelect={() => props.onCollabDialogOpen()}
-            />
-          )}
-          {!isExcalidrawPlusSignedUser && (
-            <WelcomeScreen.Center.MenuItemLink
-              href={`${
-                import.meta.env.VITE_APP_PLUS_LP
-              }/plus?utm_source=excalidraw&utm_medium=app&utm_content=welcomeScreenGuest`}
-              shortcut={null}
-              icon={loginIcon}
-            >
-              Sign up
-            </WelcomeScreen.Center.MenuItemLink>
-          )}
         </WelcomeScreen.Center.Menu>
       </WelcomeScreen.Center>
     </WelcomeScreen>

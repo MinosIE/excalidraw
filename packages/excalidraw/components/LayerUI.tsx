@@ -316,7 +316,7 @@ const LayerUI = ({
           </Stack.Col>
           {!appState.viewModeEnabled &&
             appState.openDialog?.name !== "elementLinkSelector" && (
-              <Section heading="shapes" className="shapes-section">
+              <Section heading="shapes" className="shapes-section pc">
                 {(heading: React.ReactNode) => (
                   <div style={{ position: "relative" }}>
                     {renderWelcomeScreen && (
