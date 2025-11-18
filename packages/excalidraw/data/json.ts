@@ -83,6 +83,7 @@ export const saveAsJSON = async (
   name: string = appState.name || DEFAULT_FILENAME,
 ) => {
   const serialized = serializeAsJSON(elements, appState, files, "local");
+  console.log("serialized", serialized);
   const blob = new Blob([serialized], {
     type: MIME_TYPES.excalidraw,
   });

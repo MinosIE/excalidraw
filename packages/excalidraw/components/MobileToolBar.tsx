@@ -306,7 +306,7 @@ export const MobileToolBar = ({
           name="editor-current-shape"
           title={`${capitalizeString(t("toolBar.image"))}`}
           aria-label={capitalizeString(t("toolBar.image"))}
-          data-testid="toolbar-image"
+          data-testid="toolbar-image img11"
           onChange={() => handleToolChange("image")}
         />
       )}

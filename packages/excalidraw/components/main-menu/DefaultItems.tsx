@@ -314,12 +314,15 @@ export const Export = () => {
     <DropdownMenuItem
       icon={ExportIcon}
       onSelect={() => {
+        console.log("export openDialog");
+        // 1. 上传画布截图
+        // 2. 提交画布数据
         setAppState({ openDialog: { name: "jsonExport" } });
       }}
       data-testid="json-export-button"
       aria-label={t("buttons.export")}
     >
-      {t("buttons.export")}
+      {t("buttons.export")} 1234567
     </DropdownMenuItem>
   );
 };

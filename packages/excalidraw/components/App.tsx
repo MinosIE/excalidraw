@@ -105,6 +105,7 @@ import {
   type StylesPanelMode,
   loadDesktopUIModePreference,
   setDesktopUIMode,
+  DEFAULT_SIDEBAR,
 } from "@excalidraw/common";
 
 import {
@@ -1902,6 +1903,7 @@ class App extends React.Component<AppProps, AppState> {
     elements: ExportedElements,
     opts: { exportingFrame: ExcalidrawFrameLikeElement | null },
   ) => {
+    console.log("画布导出");
     trackEvent("export", type, "ui");
     const fileHandle = await exportCanvas(
       type,
@@ -4819,7 +4821,11 @@ class App extends React.Component<AppProps, AppState> {
       this.setState({ suggestedBindings: [] });
     }
     if (nextActiveTool.type === "image") {
-      this.onImageToolbarButtonClick();
+      console.log("img dialog", this.state.openSidebar);
+      this.toggleSidebar({
+        name: DEFAULT_SIDEBAR.name,
+        tab: DEFAULT_SIDEBAR.defaultTab,
+      });
     }
 
     this.setState((prevState) => {

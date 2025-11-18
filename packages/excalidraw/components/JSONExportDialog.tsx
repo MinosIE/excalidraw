@@ -1,19 +1,14 @@
 import React from "react";
 
-import { getFrame } from "@excalidraw/common";
-
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 
-import { actionSaveFileToDisk } from "../actions/actionExport";
-
-import { trackEvent } from "../analytics";
 import { nativeFileSystemSupported } from "../data/filesystem";
 import { t } from "../i18n";
 
 import { Card } from "./Card";
 import { Dialog } from "./Dialog";
 import { ToolButton } from "./ToolButton";
-import { exportToFileIcon, LinkIcon } from "./icons";
+import { exportToFileIcon } from "./icons";
 
 import "./ExportDialog.scss";
 
@@ -29,12 +24,10 @@ export type ExportCB = (
 const JSONExportModal = ({
   elements,
   appState,
-  setAppState,
   files,
   actionManager,
   exportOpts,
   canvas,
-  onCloseRequest,
 }: {
   appState: UIAppState;
   setAppState: React.Component<any, UIAppState>["setState"];
@@ -45,7 +38,6 @@ const JSONExportModal = ({
   exportOpts: ExportOpts;
   canvas: HTMLCanvasElement;
 }) => {
-  const { onExportToBackend } = exportOpts;
   return (
     <div className="ExportDialog ExportDialog--json">
       <div className="ExportDialog-cards">
@@ -65,30 +57,7 @@ const JSONExportModal = ({
               aria-label={t("exportDialog.disk_button")}
               showAriaLabel={true}
               onClick={() => {
-                actionManager.executeAction(actionSaveFileToDisk, "ui");
-              }}
-            />
-          </Card>
-        )}
-        {onExportToBackend && (
-          <Card color="pink">
-            <div className="Card-icon">{LinkIcon}</div>
-            <h2>{t("exportDialog.link_title")}</h2>
-            <div className="Card-details">{t("exportDialog.link_details")}</div>
-            <ToolButton
-              className="Card-button"
-              type="button"
-              title={t("exportDialog.link_button")}
-              aria-label={t("exportDialog.link_button")}
-              showAriaLabel={true}
-              onClick={async () => {
-                try {
-                  trackEvent("export", "link", `ui (${getFrame()})`);
-                  await onExportToBackend(elements, appState, files);
-                  onCloseRequest();
-                } catch (error: any) {
-                  setAppState({ errorMessage: error.message });
-                }
+                actionManager.executeGetJsonAction();
               }}
             />
           </Card>

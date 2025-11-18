@@ -30,6 +30,7 @@ export const SidebarTrigger = ({
             .querySelector(".layer-ui__wrapper")
             ?.classList.remove("animate");
           const isOpen = event.target.checked;
+          console.log("{ name, tab }", { name, tab });
           setAppState({
             openSidebar: isOpen ? { name, tab } : null,
             openMenu: null,

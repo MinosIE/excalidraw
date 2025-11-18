@@ -169,7 +169,7 @@ export const exportCanvas = async (
 
   if (type === "png") {
     let blob = canvasToBlob(tempCanvas);
-
+    console.log("获取到源blob");
     if (appState.exportEmbedScene) {
       blob = blob.then((blob) =>
         import("./image").then(({ encodePngMetadata }) =>

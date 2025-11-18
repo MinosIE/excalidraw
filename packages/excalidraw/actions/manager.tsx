@@ -9,6 +9,8 @@ import type {
 
 import { trackEvent } from "../analytics";
 
+import { serializeAsJSON } from "../data/json";
+
 import type { AppClassProperties, AppState } from "../types";
 import type {
   Action,
@@ -128,7 +130,19 @@ export class ActionManager {
     this.updater(data[0].perform(elements, appState, value, this.app));
     return true;
   }
-
+  executeGetJsonAction() {
+    const elements = this.getElementsIncludingDeleted();
+    const appState = this.getAppState();
+    const app = this.app;
+    const serialized: any = serializeAsJSON(
+      elements,
+      appState,
+      app.files,
+      "local",
+    );
+    console.log("executeGetJsonAction serialized", serialized);
+    return serialized;
+  }
   executeAction<T extends Action>(
     action: T,
     source: ActionSource = "api",
