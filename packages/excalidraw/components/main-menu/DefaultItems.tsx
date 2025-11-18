@@ -307,18 +307,12 @@ export const ChangeCanvasBackground = () => {
 };
 ChangeCanvasBackground.displayName = "ChangeCanvasBackground";
 
-export const Export = () => {
+export const Export = ({ onSelect }: { onSelect?: () => void }) => {
   const { t } = useI18n();
-  const setAppState = useExcalidrawSetAppState();
   return (
     <DropdownMenuItem
       icon={ExportIcon}
-      onSelect={() => {
-        console.log("export openDialog");
-        // 1. 上传画布截图
-        // 2. 提交画布数据
-        setAppState({ openDialog: { name: "jsonExport" } });
-      }}
+      onSelect={onSelect}
       data-testid="json-export-button"
       aria-label={t("buttons.export")}
     >

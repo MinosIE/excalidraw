@@ -4821,7 +4821,7 @@ class App extends React.Component<AppProps, AppState> {
       this.setState({ suggestedBindings: [] });
     }
     if (nextActiveTool.type === "image") {
-      console.log("img dialog", this.state.openSidebar);
+      console.log("img dialog");
       this.toggleSidebar({
         name: DEFAULT_SIDEBAR.name,
         tab: DEFAULT_SIDEBAR.defaultTab,
