@@ -110,14 +110,13 @@ export const SaveToActiveFile = () => {
 };
 SaveToActiveFile.displayName = "SaveToActiveFile";
 
-export const SaveAsImage = () => {
-  const setAppState = useExcalidrawSetAppState();
+export const SaveAsImage = ({ onSelect }: { onSelect?: () => void }) => {
   const { t } = useI18n();
   return (
     <DropdownMenuItem
       icon={ExportImageIcon}
       data-testid="image-export-button"
-      onSelect={() => setAppState({ openDialog: { name: "imageExport" } })}
+      onSelect={onSelect}
       shortcut={getShortcutFromShortcutName("imageExport")}
       aria-label={t("buttons.exportImage")}
     >
@@ -316,7 +315,7 @@ export const Export = ({ onSelect }: { onSelect?: () => void }) => {
       data-testid="json-export-button"
       aria-label={t("buttons.export")}
     >
-      {t("buttons.export")} 1234567
+      {t("buttons.export")}
     </DropdownMenuItem>
   );
 };

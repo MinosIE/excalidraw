@@ -564,7 +564,6 @@ const LayerUI = ({
       )}
       <tunnels.OverwriteConfirmDialogTunnel.Out />
       {renderImageExportDialog()}
-      {renderJSONExportDialog()}
       {appState.pasteDialog.shown && (
         <PasteChartDialog
           setAppState={setAppState}

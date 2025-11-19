@@ -140,7 +140,7 @@ export class ActionManager {
       app.files,
       "local",
     );
-    console.log("executeGetJsonAction serialized", serialized);
+
     return serialized;
   }
   executeAction<T extends Action>(

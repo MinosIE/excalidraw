@@ -92,6 +92,34 @@ export const prepareElementsForExport = (
   };
 };
 
+export const getExportCanvas = async (
+  elements: ExportedElements,
+  appState: AppState,
+  files: BinaryFiles,
+  {
+    exportBackground,
+    exportPadding = DEFAULT_EXPORT_PADDING,
+    viewBackgroundColor,
+  }: {
+    exportBackground: boolean;
+    exportPadding?: number;
+    viewBackgroundColor: string;
+  },
+) => {
+  if (elements.length === 0) {
+    throw new Error(t("alerts.cannotExportEmptyCanvas"));
+  }
+
+  const tempCanvas = exportToCanvas(elements, appState, files, {
+    exportBackground,
+    viewBackgroundColor,
+    exportPadding,
+  });
+
+  const blob = await canvasToBlob(tempCanvas);
+  return blob;
+};
+
 export const exportCanvas = async (
   type: Omit<ExportType, "backend">,
   elements: ExportedElements,
@@ -169,7 +197,6 @@ export const exportCanvas = async (
 
   if (type === "png") {
     let blob = canvasToBlob(tempCanvas);
-    console.log("获取到源blob");
     if (appState.exportEmbedScene) {
       blob = blob.then((blob) =>
         import("./image").then(({ encodePngMetadata }) =>
